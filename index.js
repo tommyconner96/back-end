@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000
 // require('dotenv').config()
 server.use(helmet())
 server.use(cookieParser())
-server.use(express.json()). 
+server.use(express.json())
 // CHANGE FOR DEPLOY BASED ON FRONTEND DEPLOY URL. 
 // not until frontend is done or for testing
 server.use((req, res, next) => {
