@@ -1,4 +1,3 @@
-require('dotenv').config()
 const express = require("express")
 const helmet = require("helmet")
 const cookieParser = require("cookie-parser")
@@ -10,7 +9,7 @@ const restrict = require("./middleware/restrict")
 const server = express()
 const port = process.env.PORT || 5000
 
-
+require('dotenv').config()
 server.use(helmet())
 server.use(cookieParser())
 server.use(express.json())
