@@ -12,18 +12,20 @@ const port = process.env.PORT || 5000
 // require('dotenv').config()
 server.use(helmet())
 server.use(cookieParser())
-server.use(express.json())
-// server.use((req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", 'https://boring-visvesvaraya-e96371.netlify.app' );
-//     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Set-Cookie");
-//     res.header("Access-Control-Allow-Credentials", true);
-//     next();
-//   });
-// server.use(cors({
-// 	credentials: true,
-// 	origin: 'https://boring-visvesvaraya-e96371.netlify.app',
-// }))
+server.use(express.json()). 
+// CHANGE FOR DEPLOY BASED ON FRONTEND DEPLOY URL. 
+// not until frontend is done or for testing
+server.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", 'http://localhost:3000' );
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Set-Cookie");
+    res.header("Access-Control-Allow-Credentials", true);
+    next();
+  });
+server.use(cors({
+	credentials: true,
+	origin: 'http://localhost:3000',
+}))
 
 server.use("/auth", authRouter)
 // users route because plants will be displayed by user ID ex. /users/2/plants
