@@ -9,7 +9,7 @@ const restrict = require("./middleware/restrict")
 const server = express()
 const port = process.env.PORT || 5000
 
-require('dotenv').config()
+// require('dotenv').config()
 server.use(helmet())
 server.use(cookieParser())
 server.use(express.json())
