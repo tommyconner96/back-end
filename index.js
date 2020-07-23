@@ -4,6 +4,7 @@ const helmet = require("helmet")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
 const authRouter = require("./auth/auth-router")
+const plantRouter = require("./plants/plant-router")
 const restrict = require("./middleware/restrict")
 
 const server = express()
@@ -26,7 +27,8 @@ server.use(express.json())
 // }))
 
 server.use("/auth", authRouter)
-// server.use("/coffee", restrict(), coffeeRouter)
+// users route because plants will be displayed by user ID ex. /users/2/plants
+server.use("/users/", restrict(), plantRouter)
 
 server.get("/", (req, res, next) => {
     res.json({
