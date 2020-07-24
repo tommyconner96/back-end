@@ -7,7 +7,9 @@ const jwt = require("jsonwebtoken")
 const router = express.Router()
 
 // POST users is handled in the auth router because it involves registering a user. 
-// GET, PUT and DELETE are handled here
+// GET, and DELETE are handled here
+
+// I was having difficulty with PUT. May revisit later but it is not required for MVP
 
 // GET users
 router.get("/", restrict(), async (req, res, next) => {
@@ -51,26 +53,6 @@ router.delete('/:id', restrict(), async (req, res, next) => {
         })
 })
 
-// PUT (edit) user BY id
-router.put('/:id', restrict(), (req, res) => {
-    const { id } = req.params
-    const changes = req.body
 
-    Users.findById(id)
-        .then(scheme => {
-            if (scheme) {
-                console.log(scheme)
-                Users.update(changes, id)
-                    .then(updatedScheme => {
-                        res.json(updatedScheme)
-                    })
-            } else {
-                res.status(404).json({ message: 'Could not find scheme with given id' })
-            }
-        })
-        .catch(err => {
-            next(err)
-        })
-})
 
 module.exports = router

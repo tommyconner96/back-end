@@ -30,11 +30,7 @@ function remove(id) {
         .where("id", id)
         .del()
 }
-function update(changes, id) {
-    return db("users")
-        .where({ id })
-        .update(changes)
-}
+
 
 module.exports = {
     add,
@@ -42,5 +38,4 @@ module.exports = {
     findBy,
     findById,
     remove,
-    update
 }
