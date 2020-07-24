@@ -28,8 +28,24 @@ function createPlant(plant) {
         .then(([id]) => findPlantByID(id))
 }
 
+async function removePlant(plant_id, user_id) {
+    await db("plants")
+    .where("id", plant_id)
+    .andWhere("user_id", user_id)
+    .del()
+}
+
+async function updatePlant(plant_id, user_id, updated) {
+    await db("plants")
+    .where("id", plant_id)
+    .andWhere("user_id", user_id)
+    .update(updated)
+}
+
 module.exports = {
     findPlants,
     findPlantByID,
     createPlant,
+    removePlant,
+    updatePlant
 }
