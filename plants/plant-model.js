@@ -8,6 +8,7 @@ function findPlants(id) {
             "plants.user_id",
             )
         .select(
+            "plants.id",
             "plants.user_id",
             "plants.nickname",
             "plants.species",

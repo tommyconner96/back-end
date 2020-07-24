@@ -16,4 +16,23 @@ router.get("/:id/plants", async (req, res, next) => {
 
 })
 
+
+// POST plant
+router.post('/:id/plants', async (req, res, next) => {
+    const { id } = req.params
+
+    plants.createPlant({
+        "user_id": id,
+        "nickname": req.body.nickname,
+        "species": req.body.species,
+        "h2oFrequency": req.body.h2oFrequency,
+        "image": req.body.image
+    })
+        .then(scheme => {
+            res.status(201).json({ scheme })
+        })
+        .catch(err => next(err))
+})
+
+
 module.exports = router
