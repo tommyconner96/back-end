@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser")
 const cors = require("cors")
 const authRouter = require("./auth/auth-router")
 const plantRouter = require("./plants/plant-router")
+const usersRouter = require("./users/users-router")
 const restrict = require("./middleware/restrict")
 
 const server = express()
@@ -32,6 +33,7 @@ server.use(cors({
 server.use("/auth", authRouter)
 // users route because plants will be displayed by user ID ex. /users/2/plants
 server.use("/users/", restrict(), plantRouter)
+server.use("/users/", restrict(), usersRouter)
 
 server.get("/", (req, res, next) => {
     res.status(200).json({
