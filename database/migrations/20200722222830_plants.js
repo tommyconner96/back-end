@@ -16,8 +16,9 @@ exports.up = async function (knex) {
             .notNullable()
         table.text("species")
         .notNullable()
-        // this probably won't be text I need to look into how to implement this better
-        table.text("h2oFrequency")
+        // update 7.23.20 h20Frequency will be an integer representing number of days
+        // between plant watering
+        table.integer("h2oFrequency")
         .notNullable()
         table.text("image")// an image url put here by the frotend here might work? 
         // I'll have to look into this as well
