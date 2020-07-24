@@ -9,12 +9,12 @@ exports.seed =async  function (knex, Promise) {
       // populate the DB
       // 002-plants.js adds the user_id
       return knex('plants').insert([
-        { nickname: 'str', species: 'str', h2oFrequency: 'daily', image: 'url' },
-        { nickname: 'planty mcplantface', species: 'plantius', h2oFrequency: '5 seconds', image: 'url' },
-        { nickname: 'string', species: 'string', h2oFrequency: 'string', image: 'url' },
-        { nickname: 'Acanthaceae', species: 'Acanthaceae', h2oFrequency: 'daily', image: 'url' },
-        { nickname: 'nickname here', species: 'Cephalotaceae ', h2oFrequency: 'daily', image: 'url' },
-        { nickname: 'pretty plant', species: 'Saururaceae', h2oFrequency: 'every other day', image: 'url' },
+        { nickname: 'str', species: 'str', h2oFrequency: 1, image: 'url' },
+        { nickname: 'planty mcplantface', species: 'plantius', h2oFrequency: 2, image: 'url' },
+        { nickname: 'string', species: 'string', h2oFrequency: 1, image: 'url' },
+        { nickname: 'Acanthaceae', species: 'Acanthaceae', h2oFrequency: 4, image: 'url' },
+        { nickname: 'nickname here', species: 'Cephalotaceae', h2oFrequency: 3, image: 'url' },
+        { nickname: 'pretty plant', species: 'Saururaceae', h2oFrequency: 2, image: 'url' },
       ])
     })
 }

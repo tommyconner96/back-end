@@ -14,8 +14,10 @@ test1, test2, and test3 are registered users. password is password.
 
 this will only work on your react project if it is running from http://localhost:3000
 
-plants data structure:
-{ user_id: 1 nickname: 'str', species: 'str', h2oFrequency: 'str', image: 'str' },
+plants data structure: { user_id: integer nickname: 'str', species: 'str', h2oFrequency: integer, image: 'str' },
+
+image optional all other fields required
+h2o frequency will be a number representing number of days between plant watering.
 
 this project utilizes JWT and cookies. axios calls for protected routes will need {withCredentials: true} and login route will need to set a token in localstorage. you will need a privateroute to check for the token.
 
