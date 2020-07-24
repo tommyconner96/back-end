@@ -3,6 +3,10 @@
 routes are populated with seed data.
 
 POST to '/auth/register' will register a user. Required fields: {username, password, phoneNumber} POST to '/auth/login' will login a user. Authentication uses cookies and tokens. Required fields: {username, password} GET to '/users/:userID/plants' will get a users' plants. preset seed data has users 1-3 and they all have plants so you can test that.
+GET to '/users' gets an array of all users (protected route)
+GET to '/users/:id' gets a specific user by id (protected route)
+DELETE to '/users/:id' will DELETE a user (protected route)
+PUT to '/users/:id' will EDIT a user (protected route)
 
 test1, test2, and test3 are registered users. password is password.
 
