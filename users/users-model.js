@@ -9,6 +9,7 @@ function find() {
     return db("users").select("id", "username", "phoneNumber")
 }
 
+
 function findBy(filter) {
     return db("users")
         .select("id", "username", "password", "phoneNumber")
