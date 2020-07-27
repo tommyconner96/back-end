@@ -17,6 +17,8 @@ GET to '/users/:id' gets a specific user by id (protected route)
 
 DELETE to '/users/:id' will DELETE a user (protected route) 
 
+PUT to '/users/:id' will EDIT a user (protected route). must send a phoneNumber and password in request. username cannot be changed.
+
 POST to '/auth/register' will CREATE a user, as mentioned in first paragraph
 
 users can be CREATED, READ, and DELETED. PUT has not been implemented for users.
@@ -28,7 +30,11 @@ this will only work on your react project if it is running from http://localhost
 plants data structure: 
 { user_id: integer nickname: 'str', species: 'str', h2oFrequency: integer, image: 'str' },
 
+h2o frequency will be a number representing number of days between plant watering.
+
 GET to '/:userID/plants' will display that users' plants
+
+GET to '/:userID/plants/:plantID' will display a specific plant
 
 POST to '/:userID/plants' will create a new plant for that user (note: as it currently stands, any authenticated user can update anyones plants. If I have time I might fix that but it is not required for MVP)
 
@@ -37,7 +43,5 @@ PUT to '/:userID/plants/:plantID/' will UPDATE a users plant. same note as above
 DELETE to '/:userID/plants/:plantID/' will DELETE a users plant.
 
 image optional all other fields required 
-
-h2o frequency will be a number representing number of days between plant watering.
 
 this project utilizes JWT and cookies. axios calls for protected routes will need {withCredentials: true} and login route will need to set a token in localstorage. you will need a privateroute to check for the token.

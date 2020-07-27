@@ -1,4 +1,5 @@
 const db = require("../database/data")
+const bcrypt = require("bcryptjs")
 
 async function add(user) {
     const [id] = await db("users").insert(user)
@@ -21,15 +22,21 @@ function findById(id) {
         .where({ id })
         .first()
 }
+async function update(id, updated) {
 
-function remove(id) {
-    if (!id) {
-        return null
-    }
-    return db("users")
-        .where("id", id)
-        .del()
+    await db("users")
+        .where({ id })
+        .update(updated)
 }
+// not needed
+// function remove(id) {
+//     if (!id) {
+//         return null
+//     }
+//     return db("users")
+//         .where("id", id)
+//         .del()
+// }
 
 
 module.exports = {
@@ -37,5 +44,6 @@ module.exports = {
     find,
     findBy,
     findById,
-    remove,
+    update
+    // remove,
 }

@@ -1,15 +1,16 @@
 const express = require("express")
-const bcrypt = require("bcryptjs")
 const Users = require("./users-model")
 const restrict = require("../middleware/restrict")
-const jwt = require("jsonwebtoken")
-
+const bcrypt = require("bcryptjs")
+const { update } = require("../database/data")
 const router = express.Router()
 
 // POST users is handled in the auth router because it involves registering a user. 
-// GET, and DELETE are handled here
+// GET, and DELETE are handled here (UPDATE 7.25.20: DELETE has been taken out as we 
+// don't have a need for it and it allows any user to delete any user at the moment
+// which is not good)
 
-// I was having difficulty with PUT. May revisit later but it is not required for MVP
+// update 7.26.20 added PUT
 
 // GET users
 router.get("/", restrict(), async (req, res, next) => {
@@ -36,23 +37,27 @@ router.get('/:id', restrict(), async (req, res, next) => {
         })
 })
 
-// DELETE user BY id
-router.delete('/:id', restrict(), async (req, res, next) => {
-    const { id } = req.params
+// PUT (update) user (by ID)
+router.put('/:id', async (req, res, next) => {
+    const newPass = req.body.password
+    const hashPass = await bcrypt.hash(newPass, 12)
+    const updateBody = {
+        // "username": req.body.username,
+        "password": hashPass,
+        "phoneNumber": req.body.phoneNumber
+    }
+    if (!req.body.phoneNumber || !req.body.password) {
+        return res.status(400).json({message: "please provide a password and phone number!"})
+    }
 
-    Users.remove(id)
-        .then(deleted => {
-            if (deleted) {
-                res.status(200).json({ removed: deleted })
-            } else {
-                res.status(404).json({ message: 'Could not find user with given id' })
-            }
+    Users.update(req.params.id, updateBody)
+        .then(updated => {
+            res.status(200).json({ message: `updated user: ${req.params.id}`, updated })
         })
         .catch(err => {
             next(err)
         })
 })
-
 
 
 module.exports = router

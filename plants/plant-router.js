@@ -1,5 +1,4 @@
 const express = require("express")
-const db = require("../database/data")
 const plants = require("./plant-model")
 
 const router = express.Router()
@@ -8,7 +7,7 @@ const router = express.Router()
 // I will be adding better validation and error handling
 // next week
 
-//GET plants
+// GET plants
 router.get("/:id/plants", async (req, res, next) => {
     const { id } = req.params
     plants
@@ -18,6 +17,22 @@ router.get("/:id/plants", async (req, res, next) => {
         })
         .catch((err) => next(err))
 
+})
+
+// GET plant BY id
+router.get('/:user_id/plants/:plantID', async (req, res, next) => {
+
+    plants.findPlantByID(req.params.user_id, req.params.plantID)
+    // console.log(req.params.user_id)
+    // console.log(req.params.plantID)
+        .then(scheme => {
+            if (scheme) {
+                res.json(scheme)
+            } else {
+                res.status(404).json({ message: 'Could not find plant with given id.' })
+            }
+        })
+        .catch(err => next(err))
 })
 
 
