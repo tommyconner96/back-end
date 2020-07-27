@@ -10,7 +10,7 @@ router.post("/register", async (req, res, next) => {
 		const { username, password, phoneNumber } = req.body
 		const user = await authModel.findBy({ username }).first()
 		if (!username || !password || !phoneNumber) {
-			res.status(401).json({message: "You need to have a username, password, and phoneNumber"})
+			res.status(401).json({ message: "You need to have a username, password, and phoneNumber" })
 		}
 		if (user) {
 			return res.status(409).json({

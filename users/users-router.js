@@ -2,7 +2,6 @@ const express = require("express")
 const Users = require("./users-model")
 const restrict = require("../middleware/restrict")
 const bcrypt = require("bcryptjs")
-const { update } = require("../database/data")
 const router = express.Router()
 
 // POST users is handled in the auth router because it involves registering a user. 
@@ -13,7 +12,7 @@ const router = express.Router()
 // update 7.26.20 added PUT
 
 // GET users
-router.get("/", restrict(), async (req, res, next) => {
+router.get("/", async (req, res, next) => {
     try {
         res.json(await Users.find())
     } catch (err) {
@@ -21,10 +20,11 @@ router.get("/", restrict(), async (req, res, next) => {
     }
 })
 // GET users BY id
-router.get('/:id', restrict(), async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
     const { id } = req.params
 
-    Users.findById(id)
+    Users
+        .findById(id)
         .then(payload => {
             if (payload) {
                 res.json(payload)
@@ -49,7 +49,8 @@ router.put('/:id', async (req, res, next) => {
     if (!req.body.phoneNumber || !req.body.password) {
         return res.status(400).json({ message: "please provide a password and phone number!" })
     }
-    Users.findById(id)
+    Users
+        .findById(id)
         .then(payload => {
             console.log(payload)
             if (!payload) {
