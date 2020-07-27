@@ -19,7 +19,7 @@ function findPlants(id) {
 }
 
 async function findPlantByID(user_id, plant_id) {
-        return db("plants")
+    return db("plants")
         .where("id", plant_id).first()
         .andWhere("user_id", user_id).first()
 }

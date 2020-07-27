@@ -47,7 +47,7 @@ router.put('/:id', async (req, res, next) => {
         "phoneNumber": req.body.phoneNumber
     }
     if (!req.body.phoneNumber || !req.body.password) {
-        return res.status(400).json({message: "please provide a password and phone number!"})
+        return res.status(400).json({ message: "please provide a password and phone number!" })
     }
 
     Users.update(req.params.id, updateBody)

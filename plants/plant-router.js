@@ -23,8 +23,8 @@ router.get("/:id/plants", async (req, res, next) => {
 router.get('/:user_id/plants/:plantID', async (req, res, next) => {
 
     plants.findPlantByID(req.params.user_id, req.params.plantID)
-    // console.log(req.params.user_id)
-    // console.log(req.params.plantID)
+        // console.log(req.params.user_id)
+        // console.log(req.params.plantID)
         .then(scheme => {
             if (scheme) {
                 res.json(scheme)
@@ -40,6 +40,9 @@ router.get('/:user_id/plants/:plantID', async (req, res, next) => {
 router.post('/:id/plants', async (req, res, next) => {
     const { id } = req.params
 
+    if (!req.body.nickname || !req.body.species || !req.body.h2oFrequency) {
+        return res.status(400).json({ message: "Please include nickname, species, and h20 frequency" })
+    }
     plants.createPlant({
         "user_id": id,
         "nickname": req.body.nickname,
@@ -55,25 +58,51 @@ router.post('/:id/plants', async (req, res, next) => {
 
 // DELETE plant BY id
 router.delete('/:id/plants/:plantID', async (req, res, next) => {
-    plants.removePlant(req.params.plantID, req.params.id)
-        .then(deleted => {
-            res.status(200).json({ message: `successfully deleted plant id ${req.params.plantID} by user id ${req.params.id}`, removed: deleted })
-        })
-        .catch(err => {
-            next(err)
+
+    plants.findPlantByID(req.params.id, req.params.plantID)
+        .then((plant) => {
+            if (plant) {
+                plants.removePlant(req.params.plantID, req.params.id)
+                    .then(deleted => {
+                        res.status(200).json({ message: `successfully deleted plant id ${req.params.plantID} by user id ${req.params.id}`, removed: deleted })
+                    })
+                    .catch(err => {
+                        next(err)
+                    })
+            } else {
+                return res.status(404).json({ message: "invalid user id or plant id" })
+            }
         })
 })
 
 // PUT (update) plant BY id
 router.put('/:id/plants/:plantID', async (req, res, next) => {
+    const updateBody = {
+        "user_id": req.params.id,
+        "id": req.params.plantID,
+        "nickname": req.body.nickname,
+        "species": req.body.species,
+        "h2oFrequency": req.body.h2oFrequency,
+        "image": req.body.image
+    }
+    if (!req.body.nickname || !req.body.species || !req.body.h2oFrequency) {
+        res.status(400).json({ message: "please include nickname, species, and h20Frequency in request" })
+    }
+    plants.findPlantByID(req.params.id, req.params.plantID)
+        .then((plant) => {
+            if (plant) {
+                plants.updatePlant(req.params.plantID, req.params.id, updateBody)
+                    .then(updated => {
+                        res.status(200).json({ message: `updated plant: ${req.params.plantID}`, updated })
+                    })
+                    .catch(err => {
+                        next(err)
+                    })
+            } else {
+                return res.status(404).json({ message: "that plant doesnt exist!" })
+            }
+        })
 
-    plants.updatePlant(req.params.plantID, req.params.id, req.body)
-        .then(updated => {
-            res.status(200).json({ message: `updated plant: ${req.params.plantID}`, updated })
-        })
-        .catch(err => {
-            next(err)
-        })
 })
 
 module.exports = router
