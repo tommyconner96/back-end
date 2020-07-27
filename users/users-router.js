@@ -49,15 +49,22 @@ router.put('/:id', async (req, res, next) => {
     if (!req.body.phoneNumber || !req.body.password) {
         return res.status(400).json({ message: "please provide a password and phone number!" })
     }
+    Users.findById(id)
+        .then(payload => {
+            console.log(payload)
+            if (!payload) {
+                res.status(404).json({ message: 'Could not find user with given id.' })
 
-    Users.update(req.params.id, updateBody)
-        .then(updated => {
-            res.status(200).json({ message: `updated user: ${req.params.id}`, updated })
-        })
-        .catch(err => {
-            next(err)
+            } else {
+                Users.update(req.params.id, updateBody)
+                    .then(updated => {
+                        res.status(200).json({ message: `updated user: ${req.params.id}`, updated })
+                    })
+                    .catch(err => {
+                        next(err)
+                    })
+            }
         })
 })
-
 
 module.exports = router

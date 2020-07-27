@@ -1,5 +1,6 @@
 const express = require("express")
 const plants = require("./plant-model")
+const users = require("../users/users-model")
 
 const router = express.Router()
 
@@ -10,12 +11,20 @@ const router = express.Router()
 // GET plants
 router.get("/:id/plants", async (req, res, next) => {
     const { id } = req.params
-    plants
-        .findPlants(id)
-        .then(plants => {
-            res.status(200).json(plants)
+    users.findById(id)
+        .then(payload => {
+            if (payload) {
+                plants
+                    .findPlants(id)
+                    .then(plants => {
+                        res.status(200).json(plants)
+                    })
+                    .catch((err) => next(err))
+            } else {
+                res.status(404).json({ message: 'Could not find user with given id.' })
+            }
         })
-        .catch((err) => next(err))
+
 
 })
 
