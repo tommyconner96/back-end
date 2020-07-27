@@ -50,7 +50,7 @@ router.put('/:id', async (req, res, next) => {
         return res.status(400).json({ message: "please provide a password and phone number!" })
     }
     Users
-        .findById(id)
+        .findById(req.params.id)
         .then(payload => {
             console.log(payload)
             if (!payload) {
