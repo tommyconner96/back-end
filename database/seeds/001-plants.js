@@ -9,12 +9,12 @@ exports.seed =async  function (knex, Promise) {
       // populate the DB
       // 002-plants.js adds the user_id
       return knex('plants').insert([
-        { nickname: 'str', species: 'str', h2oFrequency: 1, image: 'url' },
-        { nickname: 'planty mcplantface', species: 'plantius', h2oFrequency: 2, image: 'url' },
-        { nickname: 'string', species: 'string', h2oFrequency: 1, image: 'url' },
-        { nickname: 'Acanthaceae', species: 'Acanthaceae', h2oFrequency: 4, image: 'url' },
-        { nickname: 'nickname here', species: 'Cephalotaceae', h2oFrequency: 3, image: 'url' },
-        { nickname: 'pretty plant', species: 'Saururaceae', h2oFrequency: 2, image: 'url' },
+        { nickname: 'Blue Mouse Ears', species: 'Hosta', h2oFrequency: 2, image: 'url' },
+        { nickname: 'Cherry Vanilla', species: 'Dianthus', h2oFrequency: 4, image: 'url' },
+        { nickname: 'Valentine Bleeding Heart', species: 'Dicentra Spectabilis', h2oFrequency: 3, image: 'url' },
+        { nickname: 'English Lavender', species: 'Lobelia', h2oFrequency: 1, image: 'url' },
+        { nickname: 'Hen & Chicks', species: 'Sempervivum', h2oFrequency: 3, image: 'url' },
+        { nickname: 'Sugar Buzz "Bee Balm"', species: 'Mondara', h2oFrequency: 1, image: 'url' },
       ])
     })
 }
