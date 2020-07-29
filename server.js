@@ -19,7 +19,7 @@ server.use(express.json())
 // CHANGE FOR DEPLOY BASED ON FRONTEND DEPLOY URL. 
 // // not until frontend is done or for testing
 server.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", 'https://front-end-git-axiosadd.buildweek-water-my-plants-3.vercel.app')
+    res.header("Access-Control-Allow-Origin", 'http://localhost:3000')
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS")
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Set-Cookie")
     res.header("Access-Control-Allow-Credentials", true)
@@ -27,7 +27,7 @@ server.use((req, res, next) => {
 })
 server.use(cors({
     credentials: true,
-    origin: 'https://front-end-git-axiosadd.buildweek-water-my-plants-3.vercel.app',
+    origin: 'http://localhost:3000',
 }))
 
 server.use("/auth", authRouter)
