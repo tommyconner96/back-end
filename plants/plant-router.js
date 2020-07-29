@@ -9,6 +9,7 @@ const router = express.Router()
 // next week
 
 // GET plants
+// ADD VALIDATION TO ENSURE THAT PLANTS ARE RETURNED IF BLANK JSON RETURNED GIVE AN ERROR
 router.get("/:id/plants", async (req, res, next) => {
     const { id } = req.params
     users
@@ -48,6 +49,7 @@ router.get('/:user_id/plants/:plantID', async (req, res, next) => {
 
 
 // POST plant
+// add validation for POST plant to ensure user ID exists
 router.post('/:id/plants', async (req, res, next) => {
     const { id } = req.params
 

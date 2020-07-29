@@ -1,93 +1,158 @@
 const db = require('../database/data')
 const request = require('supertest')
-const server = require('../server.js')
+const expect = require('chai').expect
+const app = require('../server.js')
 
-// a global jest hook to run before each individual test
-beforeEach(async () => {
-	// re-run the seeds and start with a fresh database for each test
-	await db.seed.run()
+
+
+before(function (done) {
+    db.migrate.rollback()
+        .then(() => {
+            db.migrate.latest()
+                .then(() => {
+                    return db.seed.run()
+                        .then(() => {
+                            done()
+                        })
+                })
+        })
 })
 
-// a global jest hook to run after all the tests are done
-afterAll(async () => {
-	// closes the database connection so the jest command doesn't stall
-	await db.destroy()
+after(function (done) {
+    db.migrate.rollback()
+        .then(() => {
+            done()
+        })
 })
 
-// TEST route
-describe('test route', () => {
-    it('should return a 200 status code', async () => {
-        const expected = 200
-        const response = await request(server).get('/')
-        expect(response.status).toEqual(expected)
-    })
+// set up the data we need to pass to the login method
+const userCredentials = {
+    username: 'test1',
+    password: 'password'
+}
+// login the user before it runs tests
+const authenticatedUser = request.agent(app)
+before(function (done) {
+    authenticatedUser
+        .post('/auth/login')
+        .send(userCredentials)
+        .end(function (err, response) {
+            expect(response.statusCode).to.equal(200)
+            done()
+        })
 })
 
-// AUTHENTICATION testing
-describe("login user", () => {
-    it('returns 200 status with proper credentials', async () => {
-        const payload = { username: "test1", password: "password" }
-        const response = await request(server)
-            .post("/auth/login")
-            .send(payload)
-        expect(response.statusCode).toBe(200)
-    })
-    it('returns 401 status if wrong credentials', async () => {
-        const payload = { username: "fake", password: "fakepassword" }
-        const response = await request(server)
-            .post("/auth/login")
-            .send(payload)
-        expect(response.statusCode).toBe(401)
-    })
-    it('returns 500 internal service error if wrong json is provided', async () => {
-        const payload = { NOTusername: "test1", NOTpassword: "password" }
-        const response = await request(server)
-            .post("/auth/login")
-            .send(payload)
-        expect(response.statusCode).toBe(500)
-    })
-})
 
-// REGISTER testing
-describe("register user", () => {
-    it('returns 201 created if username password and phoneNumber are provided', async () => {
-        const payload = { username: "a", password: "password", phoneNumber: "1231231" }
-        const response = await request(server)
-            .post("/auth/register")
-            .send(payload)
-        expect(response.statusCode).toBe(201)
+describe('GET /users', function (done) {
+    it('should return a 200 response if the user is logged in', function (done) {
+        authenticatedUser.get('/users')
+            .expect(200, done)
     })
-    it('returns 409 conflict if username exists', async () => {
-        const payload = { username: "test1", password: "password", phoneNumber: "1" }
-        const response = await request(server)
-            .post("/auth/register")
-            .send(payload)
-        expect(response.statusCode).toBe(409)
-    })
-    it('returns 500 internal service error if wrong json is provided', async () => {
-        const payload = { NOTusername: "test1", NOTpassword: "password" }
-        const response = await request(server)
-            .post("/auth/register")
-            .send(payload)
-        expect(response.statusCode).toBe(500)
+    it('should return a 401 response if not logged in', function (done) {
+        request(app).get('/users')
+            .expect(401, done)
     })
 })
 
-// PLANTS
-describe('plants route', () => {
-    it('should return a 401 status if not logged in', async () => {
-        const expected = 401
-        const response = await request(server).get('/users/1/plants')
-        expect(response.status).toBe(expected)
+describe('GET /users/:id/plants', function (done) {
+    it('should return a 200 response if the user is logged in', function (done) {
+        authenticatedUser.get('/users/1/plants')
+            .expect(200, done)
     })
-    it('returns 200 status with proper credentials', async () => {
-        const payload = { username: "test1", password: "password" }
-        const response = await request(server)
-            .post("/auth/login")
-            .send(payload)
-            .then(await request(server)
-            .get('/users/1/plants')
-            )
-        expect(response.statusCode).toBe(200)
+    it('should return a 401 response if not logged in', function (done) {
+        request(app).get('/users/1/plants')
+            .expect(401, done)
     })
 })
+
+describe('POST /users/:id/plants', function (done) {
+    it('should return a 201 response if the user is logged in', function (done) {
+        authenticatedUser.post('/users/1/plants')
+            .send({
+                "nickname": "TESTnickname",
+                "species": "TESTspecies",
+                "h2oFrequency": 10,
+                "image": "TESTurl"
+            })
+            .expect(201, done)
+    })
+    it('should return a 401 response if not logged in', function (done) {
+        request(app).post('/users/1/plants')
+            .expect(401, done)
+    })
+})
+
+describe('PUT /users/:id/plants/:plantID', function (done) {
+    it('should return a 200 response', function (done) {
+        authenticatedUser.put(`/users/1/plants/7`)
+            .send({
+                "nickname": "newTESTnickname",
+                "species": "newTESTspecies",
+                "h2oFrequency": 1,
+                "image": "TESTurl2"
+            })
+            .expect(200, done)
+    })
+})
+
+describe('DELETE /users/:id/plants/:plantID', function (done) {
+    it('should return a 200 response', function (done) {
+        authenticatedUser.delete(`/users/1/plants/8`)
+            .expect(200, done)
+    })
+})
+
+// set up the fake login data for the next
+const fakeUserCredentials = {
+    username: 'FAKEtest1',
+    password: 'password'
+}
+// login the user before it runs tests
+const unauthenticatedUser = request.agent(app)
+
+before(function (done) {
+    unauthenticatedUser
+        .post('/auth/login')
+        .send(fakeUserCredentials)
+        .end(function (err, response) {
+            expect(response.statusCode).to.equal(401)
+            done()
+        })
+})
+
+
+describe('GET /users with invalid credentials', function (done) {
+    it('should return a 401 response if the user uses invalid credentials', function (done) {
+        unauthenticatedUser.get('/users')
+            .expect(401, done)
+    })
+})
+
+describe('GET /users/:id/plants with invalid credentials', function (done) {
+    it('should return a 401 response if the user uses invalid credentials', function (done) {
+        unauthenticatedUser.get('/users/1/plants')
+            .expect(401, done)
+    })
+})
+
+describe('REGISTER a user', function (done) {
+    it('should return a 201 response if the user registered sucessfully', function (done) {
+        authenticatedUser
+            .post('/auth/register')
+            .send({
+                "username": "TESTUSERNAME11",
+                "password": "password",
+                "phoneNumber": "555-111-555"
+            })
+            .expect(201, done)
+    })
+})
+    it('should return a 401 response if missing fields', function (done) {
+        authenticatedUser
+            .post('/auth/register')
+            .send({
+                "username": "TESTUSERNAME12",
+                "password": "password"
+            })
+            .expect(401, done)
+    })
