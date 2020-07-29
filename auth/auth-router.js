@@ -40,8 +40,8 @@ router.post('/login', (req, res, next) => {
 				const token = createToken(user)
 
 				// change to this when deployed. on localhost it breaks it.
-				// res.cookie("token", token, { sameSite: 'none', secure: true, httpOnly: true })
-				res.cookie("token", token)
+				res.cookie("token", token, { sameSite: 'none', secure: true, httpOnly: true })
+				// res.cookie("token", token)
 				res.status(200).json({ message: `Hi ${user.username}! have a token:`, token, user_id: user.id })
 			} else {
 				res.status(401).json({ message: "Invalid credentiels" })
