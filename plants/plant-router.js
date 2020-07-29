@@ -4,12 +4,7 @@ const users = require("../users/users-model")
 
 const router = express.Router()
 
-// CRUD operations are all working for plants!!
-// I will be adding better validation and error handling
-// next week
-
 // GET plants
-// ADD VALIDATION TO ENSURE THAT PLANTS ARE RETURNED IF BLANK JSON RETURNED GIVE AN ERROR
 router.get("/:id/plants", async (req, res, next) => {
     const { id } = req.params
     users
@@ -19,7 +14,12 @@ router.get("/:id/plants", async (req, res, next) => {
                 plants
                     .findPlants(id)
                     .then(plants => {
-                        res.status(200).json(plants)
+                        if (plants === undefined || plants.length == 0) {
+                            res.status(404).json({ message: "no plants found for this user" })
+                        } else {
+                            res.status(200).json(plants)
+                        }
+
                     })
                     .catch((err) => next(err))
             } else {
@@ -35,8 +35,6 @@ router.get('/:user_id/plants/:plantID', async (req, res, next) => {
 
     plants
         .findPlantByID(req.params.user_id, req.params.plantID)
-        // console.log(req.params.user_id)
-        // console.log(req.params.plantID)
         .then(scheme => {
             if (scheme) {
                 res.json(scheme)
@@ -49,25 +47,33 @@ router.get('/:user_id/plants/:plantID', async (req, res, next) => {
 
 
 // POST plant
-// add validation for POST plant to ensure user ID exists
 router.post('/:id/plants', async (req, res, next) => {
     const { id } = req.params
 
     if (!req.body.nickname || !req.body.species || !req.body.h2oFrequency) {
         return res.status(400).json({ message: "Please include nickname, species, and h20 frequency" })
     }
-    plants
-        .createPlant({
-            "user_id": id,
-            "nickname": req.body.nickname,
-            "species": req.body.species,
-            "h2oFrequency": req.body.h2oFrequency,
-            "image": req.body.image
+    users
+        .findById(id)
+        .then(payload => {
+            if (payload) {
+                plants
+                    .createPlant({
+                        "user_id": id,
+                        "nickname": req.body.nickname,
+                        "species": req.body.species,
+                        "h2oFrequency": req.body.h2oFrequency,
+                        "image": req.body.image
+                    })
+                    .then(newPlant => {
+                        res.status(201).json({ newPlant })
+                    })
+                    .catch(err => next(err))
+            } else {
+                res.status(404).json({ message: 'Could not find user with given id.' })
+            }
         })
-        .then(newPlant => {
-            res.status(201).json({ newPlant })
-        })
-        .catch(err => next(err))
+
 })
 
 // DELETE plant BY id

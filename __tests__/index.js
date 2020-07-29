@@ -3,6 +3,7 @@ const request = require('supertest')
 const expect = require('chai').expect
 const app = require('../server.js')
 
+require('dotenv').config()
 
 
 before(function (done) {
