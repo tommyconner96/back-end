@@ -62,5 +62,3 @@ typings/
 .next
 
 .DS_Store
-
-__tests__/index.js

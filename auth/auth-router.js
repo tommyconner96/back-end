@@ -35,6 +35,9 @@ router.post('/login', (req, res, next) => {
 	authModel
 		.findBy({ username }).first()
 		.then(user => {
+			if (!req.body.username || !req.body.password) {
+				return res.status(400).json({ message: "Please include username and password!" })
+			}
 			if (user && bcrypt.compareSync(password, user.password)) {
 				//adds jwt token
 				const token = createToken(user)
