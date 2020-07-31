@@ -1,4 +1,6 @@
 {
+	"name": "water-my-plants-servber",
+	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
 		"test": "cross-env DB_ENV=testing mocha ./__tests__",

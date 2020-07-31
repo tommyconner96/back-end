@@ -1,49 +1,51 @@
-## back-end
+# Water My Plants
 
-routes are populated with seed data.
+Ensuring that all your plants are consistently watered is actually pretty difficult. Water My Plants is an app that helps to solve those problems. 
 
-POST to '/auth/register' will register a user. 
-Required fields: {username, password, phoneNumber} 
+With an easy to use interface for creating a plant watering schedule tailored to each individual plant, WaterMyPlants will remind users when it's time to feed that foliage and quench your plants' thirst.
 
-POST to '/auth/login' will login a user. Authentication uses cookies and tokens. Required fields: {username, password} 
+This repo is for the back end. Written in Node.js and using JWT and cookies for auth.
 
-GET to /auth/logout will remove the cookie, but not the token. You will need to implement something to remove the token. I don't think its required for MVP but its really easy to do and it will make testing easier for you also if you're able to logout.
+## Deployed link
 
-GET to '/users/:userID/plants' will get a users' plants. preset seed data has users 1-3 and they all have plants so you can test that. (protected route)
+The deployed server can be found [here](https://water-my-plants-server.herokuapp.com/).
 
-GET to '/users' gets an array of all users (protected route) 
+## Endpoints
 
-GET to '/users/:id' gets a specific user by id (protected route) 
 
-DELETE to '/users/:id' will DELETE a user (protected route) 
+# User Endpoints
 
-PUT to '/users/:id' will EDIT a user (protected route). must send a phoneNumber and password in request. username cannot be changed.
+| POST   | /auth/register          | Register a user. Required fields: {username, password, phoneNumber} 
 
-POST to '/auth/register' will CREATE a user, as mentioned in first paragraph
+| POST   | /auth/login             | Login a user. Authentication uses cookies and tokens. Required fields: {username, password}
 
-users can be CREATED, READ, and DELETED. PUT has not been implemented for users.
+| GET    | /auth/logout            | Removes the Authentication cookie. ( but not the token produced by frontend)
 
-test1, test2, and test3 are registered users. password is password.
+| GET    | /users/:userID/plants   | get a users' plants.
 
-this will only work on your react project if it is running from http://localhost:3000
+| GET    | /users                  | Returns an array of all users.
 
-plants data structure: 
-{ user_id: integer nickname: 'str', species: 'str', h2oFrequency: integer, image: 'str' },
+| GET    | /users/:id              | gets a specific user by ID
 
-image optional all other fields required 
+| PUT    | /users/:id              | Edit a user. request must contain phoneNumber and password. username cannot be changed
 
-h2o frequency will be a number representing number of days between plant watering.
+# Plant Endpoints
 
-GET to '/:userID/plants' will display that users' plants
+| GET    | /:userID/plants              | Returns plants by user ID
 
-GET to '/:userID/plants/:plantID' will display a specific plant
+| GET    | /:userID/plants/:plantID     | Returns a plant by plant ID
 
-POST to '/:userID/plants' will create a new plant for that user (note: as it currently stands, any authenticated user can update anyones plants. If I have time I might fix that but it is not required for MVP)
-required fields: {nickname, species, h2oFrequency} image optional
+| POST   | /:userID/plants              | Create a new plant. required fields: nickname(str), species(str), h2oFrequency(int) optional:image(url)
 
-PUT to '/:userID/plants/:plantID/' will UPDATE a users plant. same note as above POST
-required fields: {nickname, species, h2oFrequency} image optional
+| PUT    | /:userID/plants/:plantID     | Update a plant. required fields: nickname(str), species(str), h2oFrequency(int) optional:image(url)
 
-DELETE to '/:userID/plants/:plantID/' will DELETE a users plant.
+| DELETE | /:userID/plants/:plantID     | DELETE a plant
 
-this project utilizes JWT and cookies. axios calls for protected routes will need {withCredentials: true} and login route will need to set a token in localstorage. you will need a privateroute to check for the token.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
