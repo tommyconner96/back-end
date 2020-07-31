@@ -13,7 +13,7 @@ The deployed server can be found [here](https://water-my-plants-server.herokuapp
 ## Endpoints
 
 
-# User Endpoints
+### User Endpoints
 
 | POST   | /auth/register          | Register a user. Required fields: {username, password, phoneNumber} 
 
@@ -29,7 +29,7 @@ The deployed server can be found [here](https://water-my-plants-server.herokuapp
 
 | PUT    | /users/:id              | Edit a user. request must contain phoneNumber and password. username cannot be changed
 
-# Plant Endpoints
+### Plant Endpoints
 
 | GET    | /:userID/plants              | Returns plants by user ID
 
