@@ -1,5 +1,5 @@
 {
-	"name": "water-my-plants-servber",
+	"name": "water-my-plants-server",
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {

@@ -3,7 +3,7 @@ const request = require('supertest')
 const expect = require('chai').expect
 const app = require('../server.js')
 
-require('dotenv').config()
+// require('dotenv').config()
 
 
 before(function (done) {
@@ -22,7 +22,13 @@ before(function (done) {
 after(function (done) {
     db.migrate.rollback()
         .then(() => {
-            done()
+            db.migrate.latest()
+                .then(() => {
+                    return db.seed.run()
+                        .then(() => {
+                            done()
+                        })
+                })
         })
 })
 
